@@ -1,14 +1,14 @@
-La aplicación que voy a crear se trata de una app la cual el cliente pueda hacer estas funcionalidades:
-    - Crear usuario y contraseña
 
-Una vez creada su cuenta tener estas funcionalidades:
-    - Elegir sus 3 géneros de películas favoritos
-    - Poder editar su perfil 
-    - Dar "me gusta" a las películas 
-    - Crear una lista de "wishlist"
-    - Crear una lista de "watchlist"
-    - La aplicación te recomienda películas según los 3 géneros que hayas puesto
+APLICACIÓN DE PELÍCULAS
 
-Estos serían las funcionalidades que tendría la aplicación que nos pide el cliente, con la opción de a medida que pase el tiempo
-poder eliminar o implementar nuevas funcionalidades.
+Una vez creada su cuenta contará con más funcionalidades:
+-	Elegir sus 3 géneros de películas favoritos 
+-	Poder editar su perfil
+-	Dar “me gusta” a las películas 
+-	Crear una lista de “wishlist”
+-	Crear una lista de “watchlist”
+-	Recomendaciones a partir de los 3 géneros seleccionados anteriormente
+
+Estas serían las funcionalidades que tendría la aplicación que nos solicita el cliente, con la opción de a medida que pase el tiempo y el desarrollo de la app podamos eliminar o implementar funcionalidades.
+
 
