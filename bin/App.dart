@@ -1,6 +1,7 @@
 import "dart:io";
 import "UsuarioMr.dart";
 import "Database.dart";
+import "Watchlist.dart";
 
 class App {
   menuInicial() {
@@ -64,8 +65,8 @@ class App {
     do {
       stdout.writeln('''Hola, $nombre, elige una opción
       1 - Ver películas que me gustan 
-      2 - Ver watchlist
-      3 - Ver wishlist
+      2 - Watchlist
+      3 - Wishlist
       4 - Editar perfil
       5 - Salir''');
       opcion = parsearOpcion();
@@ -74,6 +75,7 @@ class App {
       case 1:
         break;
       case 2:
+        Watchlist().finalWatchlist(movie);
         break;
       case 3:
         break;
