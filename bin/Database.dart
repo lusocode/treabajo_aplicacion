@@ -15,7 +15,7 @@ class Database {
     try {
       await _crearDB(conn);
       await _crearTablaUsuarios(conn);
-      await _crearTablaMascotas(conn);
+      await _crearTablaPeliculas(conn);
       await conn.close();
     } catch (e) {
       print(e);
@@ -25,7 +25,10 @@ class Database {
 
   Future<MySqlConnection> conexion() async {
     var settings = ConnectionSettings(
-        host: this._host, port: this._port, user: this._user, db: 'damdb');
+        host: this._host,
+        port: this._port,
+        user: this._user,
+        db: 'movierecords');
 
     return await MySqlConnection.connect(settings);
   }
@@ -39,23 +42,21 @@ class Database {
   _crearTablaUsuarios(conn) async {
     await conn.query('''CREATE TABLE IF NOT EXISTS usuarios(
         idusuario INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-        nombre VARCHAR(50) NOT NULL UNIQUE,
-        password VARCHAR(10) NOT NULL
+        nombre VARCHAR(50) NOT NULL,
+        password VARCHAR(10) NOT NULL,
+        correo VARCHAR(50) NOT NULL UNIQUE
     )''');
     print('Tabla usuarios creada');
   }
 
-  _crearTablaMascotas(conn) async {
-    await conn.query('''CREATE TABLE IF NOT EXISTS mascotas(
-        idmascota INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-        nombre VARCHAR(50),
-        idusuario INT NOT NULL,
-        especie VARCHAR(50),
-        genero VARCHAR(50),
-        edad INT,
-        muerto BOOL,
-        FOREIGN KEY(idusuario) REFERENCES usuarios(idusuario)
-    )''');
-    print('Tabla mascotas creada');
+  _crearTablaPeliculas(conn) async {
+    await conn.query('''CREATE TABLE IF NOT EXISTS peliculas(
+        idpelicula INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+        titulo VARCHAR(50),
+        lanzamiento DATE,
+        duracion INT,
+        IMDB DOUBLE
+      )''');
+    print('Tabla peliculas creada');
   }
 }
