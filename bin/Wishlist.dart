@@ -4,28 +4,30 @@ import "package:http/http.dart" as http;
 import "UsuarioMr.dart";
 import "App.dart";
 
-class Watchlist {
+class Wishlist {
   String? _apiKey = "a45fb635";
 
-  finalWatchlist(movie) {
-    final apiKey = 'http://www.omdbapi.com/?apikey=$_apiKey&s=$movie';
-    final omdb = Watchlist();
-    List<Map<String, dynamic>> watchlist = [];
+  finalWishlist(movie) {
     String? nombre = UsuarioMr().nombre;
     int? opcion;
+    String? movie;
 
     do {
-      stdout.writeln('''Hola $nombre, estás en tu Watchlist, qué deseas hacer
-    1 - Añadir una película
-    2 - Borrar una película
+      stdout.writeln("Hola $nombre, ingresa el nombre de la película");
+      movie = stdin.readLineSync() ?? "e";
+      if (movie != null && movie.isNotEmpty) {
+        stdout.writeln('''Qué deseas hacer
+    1 - Añadir la película
+    2 - Borrar la película
     3 - Mostrar tus películas de Watchlist
     4 - Volver al menú
     ''');
+      }
       opcion = App().parsearOpcion();
     } while (watchlistLogueada_respuestaNoValida(opcion));
     switch (opcion) {
       case 1:
-        addAWatchlist(watchlist, movie);
+        addAWatchlist(wishlist, movie);
         break;
       case 2:
         borrarDeWatchlist(watchlist, movie);
@@ -48,7 +50,7 @@ class Watchlist {
     }
   }
 
-  List<Map<String, dynamic>> addAWatchlist(
+  List<Map<String, dynamic>> addAWishlist(
       List<Map<String, dynamic>> watchlist, Map<String, dynamic> movie) {
     watchlist.add(movie);
     stdout.writeln("${movie["Title"]} añadida a Watchlist");

@@ -2,6 +2,7 @@ import "dart:io";
 import "UsuarioMr.dart";
 import "Database.dart";
 import "Watchlist.dart";
+import 'Wishlist.dart';
 
 class App {
   menuInicial() {
@@ -20,6 +21,35 @@ class App {
       case 2:
         login();
         break;
+    }
+  }
+
+  menuLogueado(UsuarioMr usuario) async {
+    int? opcion;
+    String? nombre = usuario.nombre;
+
+    do {
+      stdout.writeln('''Hola, $nombre, elige una opción
+      1 - Ver películas que me gustan
+      2 - Watchlist
+      3 - Wishlist
+      4 - Editar perfil
+      5 - Salir''');
+      opcion = parsearOpcion();
+    } while (menuLogueado_respuestaNoValida(opcion));
+    switch (opcion) {
+      case 1:
+        break;
+      case 2:
+        Watchlist().finalWatchlist();
+        break;
+      case 3:
+        Wishlist().finalWishlist();
+        break;
+      case 4:
+        break;
+      case 5:
+        menuInicial();
     }
   }
 
@@ -42,7 +72,7 @@ class App {
       opcion != 1 && opcion != 2 && opcion != 3 && opcion != 4;
 
   login() async {
-    UsuarioMr usuario = new UsuarioMr();
+    UsuarioMr usuario = UsuarioMr();
     stdout.writeln('Introduce tu nombre de usuario');
     usuario.nombre = stdin.readLineSync();
     stdout.writeln("Dime tu correo electrónico");
@@ -56,32 +86,6 @@ class App {
       menuInicial();
     } else {
       menuLogueado(resultado);
-    }
-  }
-
-  menuLogueado(UsuarioMr usuario) async {
-    int? opcion;
-    String? nombre = usuario.nombre;
-    do {
-      stdout.writeln('''Hola, $nombre, elige una opción
-      1 - Ver películas que me gustan 
-      2 - Watchlist
-      3 - Wishlist
-      4 - Editar perfil
-      5 - Salir''');
-      opcion = parsearOpcion();
-    } while (menuLogueado_respuestaNoValida(opcion));
-    switch (opcion) {
-      case 1:
-        break;
-      case 2:
-        Watchlist().finalWatchlist(movie);
-        break;
-      case 3:
-        break;
-      case 4:
-        print('Adiós');
-        break;
     }
   }
 }
