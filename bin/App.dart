@@ -41,7 +41,7 @@ class App {
       case 1:
         break;
       case 2:
-        Watchlist().finalWatchlist();
+        Watchlist().finalWatchlist(pelicula);
         break;
       case 3:
         Wishlist().finalWishlist();

@@ -9,7 +9,6 @@ class Watchlist {
 
   finalWatchlist(movie) {
     final apiKey = 'http://www.omdbapi.com/?apikey=$_apiKey&s=$movie';
-    final omdb = Watchlist();
     List<Map<String, dynamic>> watchlist = [];
     String? nombre = UsuarioMr().nombre;
     int? opcion;
