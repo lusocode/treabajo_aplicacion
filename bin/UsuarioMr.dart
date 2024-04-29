@@ -1,4 +1,5 @@
 import "package:mysql1/mysql1.dart";
+import "App.dart";
 
 import "Database.dart";
 
@@ -33,6 +34,7 @@ class UsuarioMr {
           'INSERT INTO usuarios (nombre, password, correo) VALUES (?,?,?)',
           [_nombre, _password, _correoElectronico]);
       print('Usuario insertado correctamente');
+      App().menuLogueado(UsuarioMr());
     } catch (e) {
       print(e);
     } finally {

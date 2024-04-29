@@ -51,11 +51,11 @@ class Database {
 
   _crearTablaPeliculas(conn) async {
     await conn.query('''CREATE TABLE IF NOT EXISTS peliculas(
-        idpelicula INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+        idpelicula INT NOT NULL AUTO_INCREMENT,
         titulo VARCHAR(50),
         lanzamiento DATE,
         duracion INT,
-        IMDB DOUBLE
+        IMDB DOUBLE PRIMARY KEY
       )''');
     print('Tabla peliculas creada');
   }

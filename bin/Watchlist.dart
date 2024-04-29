@@ -7,10 +7,9 @@ import "App.dart";
 class Watchlist {
   String? _apiKey = "a45fb635";
 
-  finalWatchlist(movie) {
-    final apiKey = 'http://www.omdbapi.com/?apikey=$_apiKey&s=$movie';
+  finalWatchlist(usuario) {
     List<Map<String, dynamic>> watchlist = [];
-    String? nombre = UsuarioMr().nombre;
+    String? nombre = usuario.nombre;
     int? opcion;
 
     do {
@@ -24,10 +23,10 @@ class Watchlist {
     } while (watchlistLogueada_respuestaNoValida(opcion));
     switch (opcion) {
       case 1:
-        addAWatchlist(watchlist, movie);
+        addAWatchlist();
         break;
       case 2:
-        borrarDeWatchlist(watchlist, movie);
+        // borrarDeWatchlist(watchlist);
         break;
       case 3:
         mostrarWatchlist(watchlist);
@@ -37,28 +36,28 @@ class Watchlist {
     }
   }
 
-  Future<Map<String, dynamic>> buscarPelicula(String query) async {
-    Uri url2 = Uri.parse('http://www.omdbapi.com/?apikey=$_apiKey&s=$query');
-    final respuesta = await http.get(url2);
-    if (respuesta.statusCode == 200) {
-      return json.decode(respuesta.body);
-    } else {
-      throw ("Error al cargar película");
+  Future<void> addAWatchlist() async {
+    String? apiKey = "a45fb635";
+    stdout.writeln("Hola! ¿Qué película te interesa añadir?");
+    String titulo = stdin.readLineSync() ?? "e";
+    Uri url = Uri.parse('http://www.omdbapi.com/?apikey=$apiKey&s=$titulo');
+    var respuesta = await http.get(url);
+    try {
+      if (respuesta.statusCode == 200) {
+        var body = json.decode(respuesta.body);
+        for (int i = 0; i < body['Search'].length; i++) {
+          var titulo = body['Search'][i]['Title'];
+          var year = body['Search'][i]['Year'];
+          var idpelicula = i + 1;
+          stdout.writeln(' $idpelicula: $titulo from $year');
+        }
+      } else if (respuesta.statusCode == 404) {
+        throw ("El pokemon que buscas no existe!");
+      } else
+        throw ("Ha habido un error de conexión");
+    } catch (e) {
+      stdout.writeln(e);
     }
-  }
-
-  List<Map<String, dynamic>> addAWatchlist(
-      List<Map<String, dynamic>> watchlist, Map<String, dynamic> movie) {
-    watchlist.add(movie);
-    stdout.writeln("${movie["Title"]} añadida a Watchlist");
-    return watchlist;
-  }
-
-  List<Map<String, dynamic>> borrarDeWatchlist(
-      List<Map<String, dynamic>> watchlist, String titulo) {
-    watchlist.removeWhere((movie) => movie['Title'] == titulo);
-    stdout.writeln('$titulo ha sido borrado de su Watchlist');
-    return watchlist;
   }
 
   void mostrarWatchlist(List<Map<String, dynamic>> watchlist) {

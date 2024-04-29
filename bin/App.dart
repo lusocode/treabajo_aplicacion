@@ -6,6 +6,8 @@ import 'Wishlist.dart';
 
 class App {
   menuInicial() {
+    stdout.writeln("entra");
+
     int? opcion;
     do {
       stdout.writeln('''Elige una opción
@@ -41,7 +43,7 @@ class App {
       case 1:
         break;
       case 2:
-        Watchlist().finalWatchlist(pelicula);
+        Watchlist().finalWatchlist(usuario);
         break;
       case 3:
         Wishlist().finalWishlist();
@@ -50,6 +52,7 @@ class App {
         break;
       case 5:
         menuInicial();
+        break;
     }
   }
 
@@ -61,6 +64,8 @@ class App {
     usuarioMr.nombre = stdin.readLineSync() ?? "e";
     stdout.writeln("Introduce una contraseña");
     usuarioMr.password = stdin.readLineSync() ?? "e";
+    stdout.writeln("Introduce un correo electrónico");
+    usuarioMr.correoElectronico = stdin.readLineSync() ?? "e";
     usuarioMr.insertarUsuario();
   }
 
@@ -69,7 +74,7 @@ class App {
       opcion == null || (opcion != 1 && opcion != 2);
   bool menuLogueado_respuestaNoValida(int? opcion) =>
       opcion == null ||
-      opcion != 1 && opcion != 2 && opcion != 3 && opcion != 4;
+      opcion != 1 && opcion != 2 && opcion != 3 && opcion != 4 && opcion != 5;
 
   login() async {
     UsuarioMr usuario = UsuarioMr();
