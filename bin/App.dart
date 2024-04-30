@@ -1,7 +1,7 @@
 import "dart:io";
 import "UsuarioMr.dart";
 import "Database.dart";
-import "Watchlist.dart";
+import "Watched.dart";
 import 'Wishlist.dart';
 
 class App {
@@ -43,10 +43,10 @@ class App {
       case 1:
         break;
       case 2:
-        Watchlist().finalWatchlist(usuario);
+        Watchlist().finalWatchedlist(usuario);
         break;
       case 3:
-        Wishlist().finalWishlist();
+        Wishlist().finalWishlist(usuario);
         break;
       case 4:
         break;

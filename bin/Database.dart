@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:mysql1/mysql1.dart';
 
 class Database {
@@ -16,6 +18,7 @@ class Database {
       await _crearDB(conn);
       await _crearTablaUsuarios(conn);
       await _crearTablaPeliculas(conn);
+      await _crearTablaWatchedList(conn);
       await conn.close();
     } catch (e) {
       print(e);
@@ -36,7 +39,7 @@ class Database {
   _crearDB(conn) async {
     await conn.query('CREATE DATABASE IF NOT EXISTS movierecords');
     await conn.query('USE movierecords');
-    print('Conectado a movierecords');
+    stdout.writeln('Conectado a movierecords');
   }
 
   _crearTablaUsuarios(conn) async {
@@ -46,17 +49,31 @@ class Database {
         password VARCHAR(10) NOT NULL,
         correo VARCHAR(50) NOT NULL UNIQUE
     )''');
-    print('Tabla usuarios creada');
+    stdout.writeln('Tabla usuarios creada');
   }
 
   _crearTablaPeliculas(conn) async {
     await conn.query('''CREATE TABLE IF NOT EXISTS peliculas(
-        idpelicula INT NOT NULL AUTO_INCREMENT,
+        idpelicula INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
         titulo VARCHAR(50),
         lanzamiento DATE,
         duracion INT,
-        IMDB DOUBLE PRIMARY KEY
+        IMDB DOUBLE,
+        FOREIGN KEY(idusuario) REFERENCES usuarios (idusuario)
       )''');
-    print('Tabla peliculas creada');
+    stdout.writeln('Tabla peliculas creada');
+  }
+
+  _crearTablaWatchedList(conn) async {
+    await conn.query('''CREATE TABLE IF NOT EXISTS watchedlist(
+    idwatchedlist INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    idpelicula INT NOT NULL,
+    idusuario INT NOT NULL,
+    titulo VARCHAR(50),
+    año VARCHAR(50),
+    FOREIGN KEY (idpelicula) REFERENCES peliculas (idpelicula),
+    FOREIGN KEY (idusuario) REFERENCES usuarios (idusuario)
+  )''');
+    stdout.writeln("Tabla Watchedlist creada");
   }
 }

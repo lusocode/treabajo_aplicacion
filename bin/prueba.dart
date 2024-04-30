@@ -31,7 +31,7 @@ main() async {
       var bodyDetallado = json.decode(detallesPelicula.body);
       stdout.writeln(bodyDetallado);
     } else if (respuesta.statusCode == 404) {
-      throw ("El pokemon que buscas no existe!");
+      throw ("La película que buscas no existe!");
     } else
       throw ("Ha habido un error de conexión");
   } catch (e) {
