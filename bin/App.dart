@@ -28,7 +28,7 @@ class App {
 
   menuLogueado(UsuarioMr usuario) async {
     int? opcion;
-    String? nombre = usuario.nombre;
+    String? nombre = usuario.idusuario;
 
     do {
       stdout.writeln('''Hola, $nombre, elige una opción
@@ -57,16 +57,16 @@ class App {
   }
 
   creacionUsuario() async {
-    await Database().instalacion();
     UsuarioMr usuarioMr = new UsuarioMr();
 
     stdout.writeln("Introduce un nombre de usuario");
-    usuarioMr.nombre = stdin.readLineSync() ?? "e";
+    usuarioMr.idusuario = stdin.readLineSync() ?? "e";
     stdout.writeln("Introduce una contraseña");
     usuarioMr.password = stdin.readLineSync() ?? "e";
     stdout.writeln("Introduce un correo electrónico");
     usuarioMr.correoElectronico = stdin.readLineSync() ?? "e";
     usuarioMr.insertarUsuario();
+    menuLogueado(usuarioMr);
   }
 
   int? parsearOpcion() => int.tryParse(stdin.readLineSync() ?? 'e');
@@ -79,7 +79,7 @@ class App {
   login() async {
     UsuarioMr usuario = UsuarioMr();
     stdout.writeln('Introduce tu nombre de usuario');
-    usuario.nombre = stdin.readLineSync();
+    usuario.idusuario = stdin.readLineSync();
     stdout.writeln("Dime tu correo electrónico");
     usuario.correoElectronico = stdin.readLineSync();
     stdout.writeln('Introduce tu constraseña');

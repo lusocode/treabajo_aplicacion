@@ -2,69 +2,30 @@ import "dart:io";
 import "dart:convert";
 import "package:http/http.dart" as http;
 import "Movie.dart";
-import "UsuarioMr.dart";
 import "App.dart";
 import "Database.dart";
+import 'package:mysql1/mysql1.dart';
+
+import "UsuarioMr.dart";
 
 class Watchlist {
-  UsuarioMr usuario = new UsuarioMr();
-  // String? _apiKey = "a45fb635";
+  String? _idpelicula;
+  String? _idusuario;
 
-  // finalWatchedlist(usuario) {
-  //   List<Map<String, dynamic>> watchedlist = [];
-  //   String? nombre = usuario.nombre;
-  //   int? opcion;
+  String? get idpelicula => this._idpelicula;
+  String? get idusuario => this._idusuario;
 
-  //   do {
-  //     stdout.writeln('''Hola $nombre, estás en tu Watchedlist, qué deseas hacer
-  //   1 - Añadir una película
-  //   2 - Borrar una película
-  //   3 - Mostrar tus películas de Watchedlist
-  //   4 - Volver al menú
-  //   ''');
-  //     opcion = App().parsearOpcion();
-  //   } while (watchedlistLogueada_respuestaNoValida(opcion));
-  //   switch (opcion) {
-  //     case 1:
-  //       addAWatchedlist();
-  //       break;
-  //     case 2:
-  //       // borrarDeWatchlist(watchlist);
-  //       break;
-  //     case 3:
-  //       mostrarWatchedlist(watchedlist);
-  //       break;
-  //     case 4:
-  //       App().menuLogueado;
-  //   }
-  // }
+  set idpelicula(String? idpelicula) => _idpelicula = idpelicula;
+  set idusuario(String? idusuario) => _idusuario = idusuario;
 
-  // Future<void> addAWatchedlist() async {
-  //   String? apiKey = "a45fb635";
-  //   stdout.writeln("Hola! ¿Qué película te interesa añadir?");
-  //   String titulo = stdin.readLineSync() ?? "e";
-  //   Uri url = Uri.parse('http://www.omdbapi.com/?apikey=$apiKey&s=$titulo');
-  //   var respuesta = await http.get(url);
-  //   try {
-  //     if (respuesta.statusCode == 200) {
-  //       var body = json.decode(respuesta.body);
-  //       for (int i = 0; i < body['Search'].length; i++) {
-  //         var titulo = body['Search'][i]['Title'];
-  //         var year = body['Search'][i]['Year'];
-  //         var idpelicula = i + 1;
-  //         stdout.writeln(' $idpelicula: $titulo from $year');
-  //         stdout.writeln("¿Qué película de estas quieres añadir?");
-  //       }
-  //     } else if (respuesta.statusCode == 404) {
-  //       throw ("La película que buscas no existe!");
-  //     } else
-  //       throw ("Ha habido un error de conexión");
-  //   } catch (e) {
-  //     stdout.writeln(e);
-  //   }
-  // }
-  finalWatchedlist(usuario) async {
-    String? nombre = usuario.nombre;
+  Watchlist();
+  Watchlist.fromMap(ResultRow map) {
+    this._idpelicula = map['idpelicula'];
+    this._idusuario = map['idusuario'];
+  }
+
+  finalWatchedlist(UsuarioMr usuario) async {
+    String? nombre = usuario.idusuario;
     int? opcion;
     do {
       stdout.writeln('''Hola $nombre, estás en tu Watchedlist, qué deseas hacer:
@@ -77,20 +38,20 @@ class Watchlist {
     } while (watchedlistLogueada_respuestaNoValida(opcion));
     switch (opcion) {
       case 1:
-        addPelicula();
+        addPelicula(usuario);
         break;
       case 2:
         // borrarDeWatchlist(watchlist);
         break;
       case 3:
-        // mostrarWatchedlistFromUsuario();
+        List<Movie> movies = mostrarWatchedlistFromUsuario();
         break;
       case 4:
         App().menuLogueado;
     }
   }
 
-  addPelicula() async {
+  addPelicula(UsuarioMr usuario) async {
     String apiKey = "a45fb635";
     Uri url;
     stdout.writeln("¿Qué película deseas añadir?");
@@ -118,10 +79,18 @@ class Watchlist {
         var bodyDetallado = json.decode(detallesPelicula.body);
         stdout.writeln(bodyDetallado);
         Movie pelicula = new Movie();
+        pelicula.imdbID = bodyDetallado['imdbID'];
         pelicula.title = bodyDetallado['Title'];
-        pelicula.year = bodyDetallado['Year'];
-        pelicula.imdbID = bodyDetallado['imdbRating'];
+        pelicula.year = bodyDetallado['Year'].toString();
+        pelicula.runTime = bodyDetallado['Runtime'];
+        pelicula.imbdRating = bodyDetallado['imdbRating'];
         pelicula.insertarMovie();
+        print('pelicula añadida');
+        stdin.readLineSync();
+        Watchlist watchlist = new Watchlist();
+        watchlist.idpelicula = bodyDetallado['imdbID'];
+        watchlist.idusuario = usuario.idusuario;
+        watchlist.insertarWatchedlist();
       } else if (respuesta.statusCode == 404) {
         throw ("La película que buscas no existe!");
       } else
@@ -131,7 +100,20 @@ class Watchlist {
     }
   }
 
-  mostrarWatchedlistFromUsuario(int? id) async {
+  insertarWatchedlist() async {
+    var conn = await Database().conexion();
+    try {
+      await conn.query(
+          'INSERT INTO watchedlist (idpelicula, idusuario) VALUES (?,?)',
+          [_idpelicula, _idusuario]);
+    } catch (e) {
+      print(e);
+    } finally {
+      await conn.close();
+    }
+  }
+
+  mostrarWatchedlistFromUsuario(String? id) async {
     var conn = await Database().conexion();
 
     try {
@@ -145,24 +127,6 @@ class Watchlist {
       await conn.close();
     }
   }
-
-  // mostrarWatchedlist(int? id) async {
-  //   Movie peliculas = new Movie();
-  //   var conn = await Database().conexion();
-  //   stdout.writeln("Esta es tu lista de películas");
-  //   peliculas.mostrarWatchedlistFromUsuario(id);
-  // }
-
-  //   try {
-  //     var resultado = await conn.query('SELECT * FROM watchedlist');
-  //     List<Movie> movie = resultado.map((row) => Movie.fromMap(row)).toList();
-  //     return movie;
-  //   } catch (e) {
-  //     print(e);
-  //   } finally {
-  //     await conn.close();
-  //   }
-  // }
 
   int? parsearOpcion() => int.tryParse(stdin.readLineSync() ?? 'e');
 

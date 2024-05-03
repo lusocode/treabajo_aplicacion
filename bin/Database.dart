@@ -44,8 +44,7 @@ class Database {
 
   _crearTablaUsuarios(conn) async {
     await conn.query('''CREATE TABLE IF NOT EXISTS usuarios(
-        idusuario INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-        nombre VARCHAR(50) NOT NULL,
+        idusuario VARCHAR(20) NOT NULL PRIMARY KEY,
         password VARCHAR(10) NOT NULL,
         correo VARCHAR(50) NOT NULL UNIQUE
     )''');
@@ -56,17 +55,17 @@ class Database {
     await conn.query('''CREATE TABLE IF NOT EXISTS peliculas(
         idpelicula VARCHAR(15) NOT NULL PRIMARY KEY,
         titulo VARCHAR(50),
-        lanzamiento DATE,
-        duracion INT,
-        IMDB DOUBLE
+        lanzamiento VARCHAR (4),
+        duracion VARCHAR(10),
+        IMDB VARCHAR(10)
       )''');
     stdout.writeln('Tabla peliculas creada');
   }
 
   _crearTablaWatchedList(conn) async {
     await conn.query('''CREATE TABLE IF NOT EXISTS watchedlist(
-    idpelicula INT NOT NULL,
-    idusuario INT NOT NULL,
+    idpelicula VARCHAR (15) NOT NULL,
+    idusuario VARCHAR(20) NOT NULL,
     PRIMARY KEY (idpelicula, idusuario),
     FOREIGN KEY (idpelicula) REFERENCES peliculas (idpelicula),
     FOREIGN KEY (idusuario) REFERENCES usuarios (idusuario)

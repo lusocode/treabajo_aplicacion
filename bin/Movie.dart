@@ -6,43 +6,39 @@ import 'Database.dart';
 import 'UsuarioMr.dart';
 
 class Movie {
+  String? _imdbID;
   String? _title;
   String? _year;
-  String? _imdbID;
-  int? _idusuario;
-  int? _idwatchedlist;
-  int? _idpelicula;
+  String? _runTime;
+  String? _imdbRating;
 
+  String? get imdbID => this._imdbID;
   String? get title => this._title;
   String? get year => this._year;
-  String? get imdbID => this._imdbID;
-  int? get idusuario => this._idusuario;
-  int? get idwatchedlist => this._idwatchedlist;
-  int? get idpelicula => this._idpelicula;
+  String? get runTime => this._runTime;
+  String? get imbdRating => this._imdbRating;
 
+  set imdbID(String? imdbID) => _imdbID = imdbID;
   set title(String? title) => _title = title;
   set year(String? year) => _year = year;
-  set imdbID(String? imdbID) => _imdbID = imdbID;
-  set idusuario(int? idusuario) => _idusuario = idusuario;
-  set idwatchedlist(int? idwatchedlist) => _idwatchedlist = idwatchedlist;
-  set idpelicula(int? idpelicula) => _idpelicula = idpelicula;
+  set runTime(String? runTime) => _runTime = runTime;
+  set imbdRating(String? imbdRating) => _imdbRating = imbdRating;
 
   Movie();
   Movie.fromMap(ResultRow map) {
+    this._imdbID = map['imdbID'];
     this._title = map['title'];
     this._year = map['year'];
-    this._imdbID = map['imdbID'];
-    this._idusuario = map['idusuario'];
-    this._idwatchedlist = map['idwatchedlist'];
-    this._idpelicula = map['idpelicula'];
+    this._runTime = map['runTime'];
+    this._imdbRating = map['imdbRating'];
   }
 
   insertarMovie() async {
     var conn = await Database().conexion();
     try {
       await conn.query(
-          'INSERT INTO watchedlist ( titulo, año, idusuario, idwatchedlist, idpelicula) VALUES (?,?,?,?,?)',
-          [_title, _year, _idusuario, _idwatchedlist, _idpelicula]);
+          'INSERT INTO peliculas (idpelicula, titulo, lanzamiento, duracion, IMDB) VALUES (?,?,?,?,?)',
+          [_imdbID, _title, _year, _runTime, _imdbRating]);
     } catch (e) {
       print(e);
     } finally {

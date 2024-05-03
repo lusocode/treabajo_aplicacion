@@ -4,17 +4,15 @@ import "App.dart";
 import "Database.dart";
 
 class UsuarioMr {
-  int? _idusuario;
-  String? _nombre;
+  String? _idusuario;
   String? _password;
   String? _correoElectronico;
 
-  int? get idusuario => _idusuario;
-  String? get nombre => _nombre;
+  String? get idusuario => _idusuario;
   String? get password => _password;
   String? get correoElectronico => _correoElectronico;
 
-  set nombre(String? nombre) => _nombre = nombre;
+  set idusuario(String? idusuario) => _idusuario = idusuario;
   set password(String? password) => _password = password;
   set correoElectronico(String? correoElectronico) =>
       _correoElectronico = correoElectronico;
@@ -22,7 +20,6 @@ class UsuarioMr {
   UsuarioMr();
   UsuarioMr.fromMap(ResultRow map) {
     _idusuario = map['idusuario'];
-    _nombre = map['nombre'];
     _password = map['password'];
     _correoElectronico = map['correoElectronico'];
   }
@@ -31,10 +28,9 @@ class UsuarioMr {
     var conn = await Database().conexion();
     try {
       await conn.query(
-          'INSERT INTO usuarios (nombre, password, correo) VALUES (?,?,?)',
-          [_nombre, _password, _correoElectronico]);
+          'INSERT INTO usuarios (idusuario, password, correo) VALUES (?,?,?)',
+          [_idusuario, _password, _correoElectronico]);
       print('Usuario insertado correctamente');
-      App().menuLogueado(UsuarioMr());
     } catch (e) {
       print(e);
     } finally {
@@ -45,8 +41,8 @@ class UsuarioMr {
   loginUsuario() async {
     var conn = await Database().conexion();
     try {
-      var resultado = await conn
-          .query('SELECT * FROM usuarios WHERE nombre = ?', [this._nombre]);
+      var resultado = await conn.query(
+          'SELECT * FROM usuarios WHERE idusuario = ?', [this._idusuario]);
       UsuarioMr usuario = UsuarioMr.fromMap(resultado.first);
       if (this._password == usuario.password) {
         return usuario;
