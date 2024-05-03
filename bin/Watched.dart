@@ -7,6 +7,7 @@ import "App.dart";
 import "Database.dart";
 
 class Watchlist {
+  UsuarioMr usuario = new UsuarioMr();
   // String? _apiKey = "a45fb635";
 
   // finalWatchedlist(usuario) {
@@ -82,7 +83,7 @@ class Watchlist {
         // borrarDeWatchlist(watchlist);
         break;
       case 3:
-        mostrarWatchedlist();
+        // mostrarWatchedlistFromUsuario();
         break;
       case 4:
         App().menuLogueado;
@@ -130,20 +131,38 @@ class Watchlist {
     }
   }
 
-  mostrarWatchedlist() async {
+  mostrarWatchedlistFromUsuario(int? id) async {
     var conn = await Database().conexion();
-    stdout.writeln("Esta es tu lista de películas");
 
     try {
-      var resultado = await conn.query('SELECT * FROM watchedlist');
-      List<Movie> movie = resultado.map((row) => Movie.fromMap(row)).toList();
-      return movie;
+      var resultado = await conn
+          .query('SELECT * FROM watchedlist WHERE idusuario = ?', [id]);
+      List<Movie> movies = resultado.map((row) => Movie.fromMap(row)).toList();
+      return movies;
     } catch (e) {
       print(e);
     } finally {
       await conn.close();
     }
   }
+
+  // mostrarWatchedlist(int? id) async {
+  //   Movie peliculas = new Movie();
+  //   var conn = await Database().conexion();
+  //   stdout.writeln("Esta es tu lista de películas");
+  //   peliculas.mostrarWatchedlistFromUsuario(id);
+  // }
+
+  //   try {
+  //     var resultado = await conn.query('SELECT * FROM watchedlist');
+  //     List<Movie> movie = resultado.map((row) => Movie.fromMap(row)).toList();
+  //     return movie;
+  //   } catch (e) {
+  //     print(e);
+  //   } finally {
+  //     await conn.close();
+  //   }
+  // }
 
   int? parsearOpcion() => int.tryParse(stdin.readLineSync() ?? 'e');
 

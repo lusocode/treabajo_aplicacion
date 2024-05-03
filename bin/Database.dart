@@ -54,23 +54,20 @@ class Database {
 
   _crearTablaPeliculas(conn) async {
     await conn.query('''CREATE TABLE IF NOT EXISTS peliculas(
-        idpelicula INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+        idpelicula VARCHAR(15) NOT NULL PRIMARY KEY,
         titulo VARCHAR(50),
         lanzamiento DATE,
         duracion INT,
-        IMDB DOUBLE,
-        FOREIGN KEY(idusuario) REFERENCES usuarios (idusuario)
+        IMDB DOUBLE
       )''');
     stdout.writeln('Tabla peliculas creada');
   }
 
   _crearTablaWatchedList(conn) async {
     await conn.query('''CREATE TABLE IF NOT EXISTS watchedlist(
-    idwatchedlist INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     idpelicula INT NOT NULL,
     idusuario INT NOT NULL,
-    titulo VARCHAR(50),
-    año VARCHAR(50),
+    PRIMARY KEY (idpelicula, idusuario),
     FOREIGN KEY (idpelicula) REFERENCES peliculas (idpelicula),
     FOREIGN KEY (idusuario) REFERENCES usuarios (idusuario)
   )''');

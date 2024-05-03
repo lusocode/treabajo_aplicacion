@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:mysql1/mysql1.dart';
 import 'Database.dart';
+import 'UsuarioMr.dart';
 
 class Movie {
   String? _title;
@@ -48,18 +49,19 @@ class Movie {
       await conn.close();
     }
   }
+
+  mostrarWatchedlistFromUsuario(int? id) async {
+    var conn = await Database().conexion();
+
+    try {
+      var resultado =
+          await conn.query('SELECT * FROM peliculas WHERE idusuario = ?', [id]);
+      List<Movie> movies = resultado.map((row) => Movie.fromMap(row)).toList();
+      return movies;
+    } catch (e) {
+      print(e);
+    } finally {
+      await conn.close();
+    }
+  }
 }
-
-  // Movie({
-  //   required this.title,
-  //   required this.year,
-  //   required this.imdbID,
-  // });
-
-  // // factory Movie.fromJson(Map<String, dynamic> json) {
-  // //   return Movie(
-  // //     title: json['Title'],
-  // //     year: json['Year'],
-  // //     imdbID: json['imdbID'],
-  //   );
-
