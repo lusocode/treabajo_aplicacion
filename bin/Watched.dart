@@ -8,20 +8,24 @@ import 'package:mysql1/mysql1.dart';
 
 import "UsuarioMr.dart";
 
-class Watchlist {
+class Watchedlist {
   String? _idpelicula;
   String? _idusuario;
+  String? _title;
 
   String? get idpelicula => this._idpelicula;
   String? get idusuario => this._idusuario;
+  String? get title => this._title;
 
   set idpelicula(String? idpelicula) => _idpelicula = idpelicula;
   set idusuario(String? idusuario) => _idusuario = idusuario;
+  set title(String? title) => _title = title;
 
-  Watchlist();
-  Watchlist.fromMap(ResultRow map) {
+  Watchedlist();
+  Watchedlist.fromMap(ResultRow map) {
     this._idpelicula = map['idpelicula'];
     this._idusuario = map['idusuario'];
+    this._title = map['title'];
   }
 
   finalWatchedlist(UsuarioMr usuario) async {
@@ -41,10 +45,11 @@ class Watchlist {
         addPelicula(usuario);
         break;
       case 2:
-        // borrarDeWatchlist(watchlist);
+        // deleteMovie(usuario);
         break;
       case 3:
-        // listarMoviesUsuario(usuario.idusuario);
+        List<Watchedlist> listaWatchedlist =
+            await allWatchedlist(usuario.idusuario);
         break;
       case 4:
         App().menuLogueado;
@@ -68,7 +73,7 @@ class Watchlist {
           stdout.writeln(' $idpelicula: $titulo from $year');
         }
         stdout.writeln(
-            "¿Qué película te interesa añadir a tu Watchlist?, introduce un número");
+            "¿Qué película te interesa añadir a tu Watchedlist?, introduce un número");
         var opcion = stdin.readLineSync() ?? "e";
         int? opcionint = int.tryParse(opcion);
         opcionint = opcionint! - 1;
@@ -84,13 +89,11 @@ class Watchlist {
         pelicula.year = bodyDetallado['Year'].toString();
         pelicula.runTime = bodyDetallado['Runtime'];
         pelicula.imbdRating = bodyDetallado['imdbRating'];
-        pelicula.insertarMovie();
-        print('¡Pelicula añadida!');
-        stdin.readLineSync();
-        Watchlist watchlist = new Watchlist();
-        watchlist.idpelicula = bodyDetallado['imdbID'];
-        watchlist.idusuario = usuario.idusuario;
-        watchlist.insertarWatchedlist();
+        await pelicula.insertarMovie();
+        idpelicula = bodyDetallado['imdbID'];
+        idusuario = usuario.idusuario;
+        title = bodyDetallado['Title'];
+        await insertarWatchedlist();
       } else if (respuesta.statusCode == 404) {
         throw ("La película que buscas no existe!");
       } else
@@ -100,12 +103,40 @@ class Watchlist {
     }
   }
 
+  allWatchedlist(String? idusuario) async {
+    var conn = await Database().conexion();
+    try {
+      var resultado = await conn
+          .query('SELECT * FROM watchedlist WHERE idusuario = ?', [idusuario]);
+      List<Watchedlist> watchedlist =
+          resultado.map((row) => Watchedlist.fromMap(row)).toList();
+      return watchedlist;
+    } catch (e) {
+      print(e);
+    } finally {
+      await conn.close();
+    }
+  }
+
   insertarWatchedlist() async {
     var conn = await Database().conexion();
     try {
       await conn.query(
-          'INSERT INTO watchedlist (idpelicula, idusuario) VALUES (?,?)',
-          [_idpelicula, _idusuario]);
+          'INSERT INTO watchedlist (idpelicula, idusuario, title) VALUES (?,?,?)',
+          [_idpelicula, _idusuario, _title]);
+    } catch (e) {
+      print(e);
+    } finally {
+      await conn.close();
+    }
+  }
+
+  borrarWatchedlist() async {
+    var conn = await Database().conexion();
+    try {
+      await conn.query(
+          'DELETE FROM watchedlist WHERE idpelicula AND idusuario = ?, ?',
+          [idpelicula, idusuario]);
     } catch (e) {
       print(e);
     } finally {

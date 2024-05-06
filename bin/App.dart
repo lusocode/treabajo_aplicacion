@@ -39,7 +39,7 @@ class App {
     } while (menuLogueado_respuestaNoValida(opcion));
     switch (opcion) {
       case 1:
-        Watchlist().finalWatchedlist(usuario);
+        Watchedlist().finalWatchedlist(usuario);
         break;
       case 2:
         Wishlist().finalWishlist(usuario);
@@ -87,11 +87,11 @@ class App {
     }
   }
 
-  listarMoviesUsuario(String? id) async {
-    var listaMovies = await Movie().mostrarWatchedlistFromUsuario(id);
-    for (Movie elemento in listaMovies) {
-      stdout.writeln("${elemento.imdbID} - ${elemento.title}");
-    }
-    return listaMovies;
-  }
+  // listarMoviesUsuario(String? id) async {
+  //   var listaMovies = await Movie().mostrarWatchedlistFromUsuario(id);
+  //   for (Movie elemento in listaMovies) {
+  //     stdout.writeln("${elemento.imdbID} - ${elemento.title}");
+  //   }
+  //   return listaMovies;
+  // }
 }

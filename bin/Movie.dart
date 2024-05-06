@@ -35,6 +35,7 @@ class Movie {
       await conn.query(
           'INSERT INTO peliculas (idpelicula, titulo, lanzamiento, duracion, IMDB) VALUES (?,?,?,?,?)',
           [_imdbID, _title, _year, _runTime, _imdbRating]);
+      print('Pelicula añadida');
     } catch (e) {
       print(e);
     } finally {
@@ -42,14 +43,11 @@ class Movie {
     }
   }
 
-  mostrarWatchedlistFromUsuario(String? id) async {
+  borrarMovie() async {
     var conn = await Database().conexion();
-
     try {
-      var resultado =
-          await conn.query('SELECT * FROM peliculas WHERE idusuario = ?', [id]);
-      List<Movie> movies = resultado.map((row) => Movie.fromMap(row)).toList();
-      return movies;
+      await conn.query(
+          'ALTER TABLE peliculas DROP (idpelicula, titulo, lanzamiento, duracion, IMDB)');
     } catch (e) {
       print(e);
     } finally {

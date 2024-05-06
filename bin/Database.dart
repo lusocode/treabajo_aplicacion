@@ -67,6 +67,7 @@ class Database {
     await conn.query('''CREATE TABLE IF NOT EXISTS watchedlist(
     idpelicula VARCHAR (15) NOT NULL,
     idusuario VARCHAR(20) NOT NULL,
+    title VARCHAR(50) NOT NULL,
     PRIMARY KEY (idpelicula, idusuario),
     FOREIGN KEY (idpelicula) REFERENCES peliculas (idpelicula),
     FOREIGN KEY (idusuario) REFERENCES usuarios (idusuario)
@@ -78,6 +79,7 @@ class Database {
     await conn.query('''CREATE TABLE IF NOT EXISTS wishlist(
     idpelicula VARCHAR (15) NOT NULL,
     idusuario VARCHAR(20) NOT NULL,
+    title VARCHAR (50) NOT NULL,
     PRIMARY KEY (idpelicula, idusuario),
     FOREIGN KEY (idpelicula) REFERENCES peliculas (idpelicula),
     FOREIGN KEY (idusuario) REFERENCES usuarios (idusuario)

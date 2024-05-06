@@ -8,20 +8,23 @@ import 'package:mysql1/mysql1.dart';
 import 'Database.dart';
 
 class Wishlist {
-  String? apiKey = "a45fb635";
   String? _idpelicula;
   String? _idusuario;
+  String? _title;
 
   String? get idpelicula => this._idpelicula;
   String? get idusuario => this._idusuario;
+  String? get title => this._title;
 
   set idpelicula(String? idpelicula) => _idpelicula = idpelicula;
   set idusuario(String? idusuario) => _idusuario = idusuario;
+  set title(String? title) => _title = title;
 
   Wishlist();
   Wishlist.fromMap(ResultRow map) {
     this._idpelicula = map['idpelicula'];
     this._idusuario = map['idusuario'];
+    this._title = map['title'];
   }
 
   finalWishlist(UsuarioMr usuario) async {
@@ -84,13 +87,11 @@ class Wishlist {
         pelicula.year = bodyDetallado['Year'].toString();
         pelicula.runTime = bodyDetallado['Runtime'];
         pelicula.imbdRating = bodyDetallado['imdbRating'];
-        pelicula.insertarMovie();
-        print('!Pelicula añadida¡');
-        stdin.readLineSync();
-        Wishlist wishlist = new Wishlist();
-        wishlist.idpelicula = bodyDetallado['imdbID'];
-        wishlist.idusuario = usuario.idusuario;
-        wishlist.insertarWishlist();
+        await pelicula.insertarMovie();
+        idpelicula = bodyDetallado['imdbID'];
+        idusuario = usuario.idusuario;
+        title = bodyDetallado['Title'];
+        await insertarWishlist();
       } else if (respuesta.statusCode == 404) {
         throw ("La película que buscas no existe!");
       } else
@@ -104,8 +105,9 @@ class Wishlist {
     var conn = await Database().conexion();
     try {
       await conn.query(
-          'INSERT INTO wishlist (idpelicula, idusuario) VALUES (?,?)',
-          [_idpelicula, _idusuario]);
+          'INSERT INTO wishlist (idpelicula, idusuario, title) VALUES (?,?,?)',
+          [_idpelicula, _idusuario, _title]);
+      print('Película añadida');
     } catch (e) {
       print(e);
     } finally {
