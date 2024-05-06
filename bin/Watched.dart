@@ -44,7 +44,7 @@ class Watchlist {
         // borrarDeWatchlist(watchlist);
         break;
       case 3:
-        List<Movie> movies = mostrarWatchedlistFromUsuario();
+        // listarMoviesUsuario(usuario.idusuario);
         break;
       case 4:
         App().menuLogueado;
@@ -85,7 +85,7 @@ class Watchlist {
         pelicula.runTime = bodyDetallado['Runtime'];
         pelicula.imbdRating = bodyDetallado['imdbRating'];
         pelicula.insertarMovie();
-        print('pelicula añadida');
+        print('¡Pelicula añadida!');
         stdin.readLineSync();
         Watchlist watchlist = new Watchlist();
         watchlist.idpelicula = bodyDetallado['imdbID'];
@@ -106,21 +106,6 @@ class Watchlist {
       await conn.query(
           'INSERT INTO watchedlist (idpelicula, idusuario) VALUES (?,?)',
           [_idpelicula, _idusuario]);
-    } catch (e) {
-      print(e);
-    } finally {
-      await conn.close();
-    }
-  }
-
-  mostrarWatchedlistFromUsuario(String? id) async {
-    var conn = await Database().conexion();
-
-    try {
-      var resultado = await conn
-          .query('SELECT * FROM watchedlist WHERE idusuario = ?', [id]);
-      List<Movie> movies = resultado.map((row) => Movie.fromMap(row)).toList();
-      return movies;
     } catch (e) {
       print(e);
     } finally {

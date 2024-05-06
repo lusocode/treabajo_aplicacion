@@ -1,9 +1,5 @@
-import 'dart:convert';
-import 'dart:io';
-import 'package:http/http.dart' as http;
 import 'package:mysql1/mysql1.dart';
 import 'Database.dart';
-import 'UsuarioMr.dart';
 
 class Movie {
   String? _imdbID;
@@ -46,7 +42,7 @@ class Movie {
     }
   }
 
-  mostrarWatchedlistFromUsuario(int? id) async {
+  mostrarWatchedlistFromUsuario(String? id) async {
     var conn = await Database().conexion();
 
     try {

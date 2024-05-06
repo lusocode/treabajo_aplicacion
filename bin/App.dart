@@ -1,6 +1,6 @@
 import "dart:io";
+import "Movie.dart";
 import "UsuarioMr.dart";
-import "Database.dart";
 import "Watched.dart";
 import 'Wishlist.dart';
 
@@ -32,25 +32,19 @@ class App {
 
     do {
       stdout.writeln('''Hola, $nombre, elige una opción
-      1 - Ver películas que me gustan
-      2 - Watchlist
-      3 - Wishlist
-      4 - Editar perfil
-      5 - Salir''');
+      1 - Watchlist
+      2 - Wishlist
+      3 - Salir''');
       opcion = parsearOpcion();
     } while (menuLogueado_respuestaNoValida(opcion));
     switch (opcion) {
       case 1:
-        break;
-      case 2:
         Watchlist().finalWatchedlist(usuario);
         break;
-      case 3:
+      case 2:
         Wishlist().finalWishlist(usuario);
         break;
-      case 4:
-        break;
-      case 5:
+      case 3:
         menuInicial();
         break;
     }
@@ -73,8 +67,7 @@ class App {
   bool menuInicial_opcionNoValida(int? opcion) =>
       opcion == null || (opcion != 1 && opcion != 2);
   bool menuLogueado_respuestaNoValida(int? opcion) =>
-      opcion == null ||
-      opcion != 1 && opcion != 2 && opcion != 3 && opcion != 4 && opcion != 5;
+      opcion == null || opcion != 1 && opcion != 2 && opcion != 3;
 
   login() async {
     UsuarioMr usuario = UsuarioMr();
@@ -92,5 +85,13 @@ class App {
     } else {
       menuLogueado(resultado);
     }
+  }
+
+  listarMoviesUsuario(String? id) async {
+    var listaMovies = await Movie().mostrarWatchedlistFromUsuario(id);
+    for (Movie elemento in listaMovies) {
+      stdout.writeln("${elemento.imdbID} - ${elemento.title}");
+    }
+    return listaMovies;
   }
 }

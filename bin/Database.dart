@@ -19,6 +19,7 @@ class Database {
       await _crearTablaUsuarios(conn);
       await _crearTablaPeliculas(conn);
       await _crearTablaWatchedList(conn);
+      await _crearTablaWishlist(conn);
       await conn.close();
     } catch (e) {
       print(e);
@@ -71,5 +72,16 @@ class Database {
     FOREIGN KEY (idusuario) REFERENCES usuarios (idusuario)
   )''');
     stdout.writeln("Tabla Watchedlist creada");
+  }
+
+  _crearTablaWishlist(conn) async {
+    await conn.query('''CREATE TABLE IF NOT EXISTS wishlist(
+    idpelicula VARCHAR (15) NOT NULL,
+    idusuario VARCHAR(20) NOT NULL,
+    PRIMARY KEY (idpelicula, idusuario),
+    FOREIGN KEY (idpelicula) REFERENCES peliculas (idpelicula),
+    FOREIGN KEY (idusuario) REFERENCES usuarios (idusuario)
+  )''');
+    stdout.writeln("Tabla Wishlist creada");
   }
 }
