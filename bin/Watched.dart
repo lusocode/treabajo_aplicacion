@@ -43,6 +43,7 @@ class Watchedlist {
     switch (opcion) {
       case 1:
         addPelicula(usuario);
+        App().menuLogueado(usuario);
         break;
       case 2:
         // deleteMovie(usuario);
@@ -50,6 +51,9 @@ class Watchedlist {
       case 3:
         List<Watchedlist> listaWatchedlist =
             await allWatchedlist(usuario.idusuario);
+        for (Watchedlist watched in listaWatchedlist) {
+          stdout.writeln('Has visto: ${watched._title}');
+        }
         break;
       case 4:
         App().menuLogueado;
@@ -103,11 +107,11 @@ class Watchedlist {
     }
   }
 
-  allWatchedlist(String? idusuario) async {
+  allWatchedlist(String? id) async {
     var conn = await Database().conexion();
     try {
       var resultado = await conn
-          .query('SELECT * FROM watchedlist WHERE idusuario = ?', [idusuario]);
+          .query('SELECT * FROM watchedlist WHERE idusuario = ?', [id]);
       List<Watchedlist> watchedlist =
           resultado.map((row) => Watchedlist.fromMap(row)).toList();
       return watchedlist;
@@ -124,19 +128,6 @@ class Watchedlist {
       await conn.query(
           'INSERT INTO watchedlist (idpelicula, idusuario, title) VALUES (?,?,?)',
           [_idpelicula, _idusuario, _title]);
-    } catch (e) {
-      print(e);
-    } finally {
-      await conn.close();
-    }
-  }
-
-  borrarWatchedlist() async {
-    var conn = await Database().conexion();
-    try {
-      await conn.query(
-          'DELETE FROM watchedlist WHERE idpelicula AND idusuario = ?, ?',
-          [idpelicula, idusuario]);
     } catch (e) {
       print(e);
     } finally {
