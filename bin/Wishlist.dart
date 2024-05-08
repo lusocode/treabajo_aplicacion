@@ -41,11 +41,11 @@ class Wishlist {
     } while (watchedlistLogueada_respuestaNoValida(opcion));
     switch (opcion) {
       case 1:
-        addPeliculaWishlist(usuario);
+        await addPeliculaWishlist(usuario);
         finalWishlist(usuario);
         break;
       case 2:
-        borrarPeliculaWishlist(usuario);
+        await borrarPeliculaWishlist(usuario);
         finalWishlist(usuario);
         break;
       case 3:
@@ -56,7 +56,8 @@ class Wishlist {
         }
         break;
       case 4:
-        App().menuLogueado;
+        App().menuLogueado(usuario);
+        break;
     }
   }
 

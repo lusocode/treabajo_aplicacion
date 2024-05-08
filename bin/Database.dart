@@ -46,7 +46,7 @@ class Database {
   _crearTablaUsuarios(conn) async {
     await conn.query('''CREATE TABLE IF NOT EXISTS usuarios(
         idusuario VARCHAR(20) NOT NULL PRIMARY KEY,
-        password VARCHAR(10) NOT NULL,
+        password VARCHAR(30) NOT NULL,
         correo VARCHAR(50) NOT NULL UNIQUE
     )''');
     stdout.writeln('Tabla usuarios creada');
@@ -56,7 +56,7 @@ class Database {
     await conn.query('''CREATE TABLE IF NOT EXISTS peliculas(
         idpelicula VARCHAR(15) NOT NULL PRIMARY KEY,
         titulo VARCHAR(50),
-        lanzamiento VARCHAR (4),
+        lanzamiento VARCHAR (10),
         duracion VARCHAR(10),
         IMDB VARCHAR(10)
       )''');

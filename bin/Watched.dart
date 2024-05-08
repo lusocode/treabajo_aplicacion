@@ -42,11 +42,11 @@ class Watchedlist {
     } while (watchedlistLogueada_respuestaNoValida(opcion));
     switch (opcion) {
       case 1:
-        addPelicula(usuario);
+        await addPelicula(usuario);
         App().menuLogueado(usuario);
         break;
       case 2:
-        borrarPeliculaWatchedList(usuario);
+        await borrarPeliculaWatchedList(usuario);
         finalWatchedlist(usuario);
         break;
       case 3:
