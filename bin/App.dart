@@ -5,9 +5,7 @@ import "Watched.dart";
 import 'Wishlist.dart';
 
 class App {
-  menuInicial() {
-    stdout.writeln("entra");
-
+  menuInicial() async {
     int? opcion;
     do {
       stdout.writeln('''Elige una opción
@@ -18,10 +16,10 @@ class App {
 
     switch (opcion) {
       case 1:
-        creacionUsuario();
+        await creacionUsuario();
         break;
       case 2:
-        login();
+        await login();
         break;
     }
   }
@@ -39,10 +37,10 @@ class App {
     } while (menuLogueado_respuestaNoValida(opcion));
     switch (opcion) {
       case 1:
-        Watchedlist().finalWatchedlist(usuario);
+        await Watchedlist().finalWatchedlist(usuario);
         break;
       case 2:
-        Wishlist().finalWishlist(usuario);
+        await Wishlist().finalWishlist(usuario);
         break;
       case 3:
         menuInicial();

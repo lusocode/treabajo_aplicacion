@@ -46,13 +46,15 @@ class Watchedlist {
         App().menuLogueado(usuario);
         break;
       case 2:
-        // deleteMovie(usuario);
+        borrarPeliculaWatchedList(usuario);
+        finalWatchedlist(usuario);
         break;
       case 3:
         List<Watchedlist> listaWatchedlist =
             await allWatchedlist(usuario.idusuario);
         for (Watchedlist watched in listaWatchedlist) {
           stdout.writeln('Has visto: ${watched._title}');
+          finalWatchedlist(usuario);
         }
         break;
       case 4:
@@ -130,6 +132,36 @@ class Watchedlist {
           [_idpelicula, _idusuario, _title]);
     } catch (e) {
       print(e);
+    } finally {
+      await conn.close();
+    }
+  }
+
+  borrarPeliculaWatchedList(UsuarioMr usuario) async {
+    var conn = await Database().conexion();
+    try {
+      List<Watchedlist> listaWatchedlist =
+          await allWatchedlist(usuario.idusuario);
+      for (Watchedlist watched in listaWatchedlist) {
+        stdout.writeln('Has visto: ${watched._title}');
+      }
+      stdout.writeln('¿Qué película quieres borrar?');
+      var opcion = stdin.readLineSync() ?? 'e';
+      bool encontrado = false;
+      for (Watchedlist watched in listaWatchedlist) {
+        if (watched._title == opcion) {
+          await conn.query('DELETE FROM watchedlist WHERE title = ?', [opcion]);
+          stdout.writeln('Película borrada');
+          encontrado = true;
+          break;
+        }
+      }
+      if (encontrado == false) {
+        throw ('No se ha encontrado ninguna película con ese título');
+      }
+    } catch (e) {
+      print(e);
+      finalWatchedlist(usuario);
     } finally {
       await conn.close();
     }

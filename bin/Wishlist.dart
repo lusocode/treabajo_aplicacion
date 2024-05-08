@@ -42,12 +42,18 @@ class Wishlist {
     switch (opcion) {
       case 1:
         addPeliculaWishlist(usuario);
+        finalWishlist(usuario);
         break;
       case 2:
-        // borrarDeWatchlist(watchlist);
+        borrarPeliculaWishlist(usuario);
+        finalWishlist(usuario);
         break;
       case 3:
-        //mostrarWatchedlist(watchedlist);
+        List<Wishlist> listaWishlist = await allWishlist(usuario.idusuario);
+        for (Wishlist wish in listaWishlist) {
+          stdout.writeln('La película que quieres ver es: ${wish._title}');
+          finalWishlist(usuario);
+        }
         break;
       case 4:
         App().menuLogueado;
@@ -110,6 +116,50 @@ class Wishlist {
       print('Película añadida');
     } catch (e) {
       print(e);
+    } finally {
+      await conn.close();
+    }
+  }
+
+  allWishlist(String? id) async {
+    var conn = await Database().conexion();
+    try {
+      var resultado =
+          await conn.query('SELECT * FROM wishlist WHERE idusuario = ?', [id]);
+      List<Wishlist> wishlist =
+          resultado.map((row) => Wishlist.fromMap(row)).toList();
+      return wishlist;
+    } catch (e) {
+      print(e);
+    } finally {
+      await conn.close();
+    }
+  }
+
+  borrarPeliculaWishlist(UsuarioMr usuario) async {
+    var conn = await Database().conexion();
+    try {
+      List<Wishlist> listaWishlist = await allWishlist(usuario.idusuario);
+      for (Wishlist watched in listaWishlist) {
+        stdout.writeln('Quieres ver: ${watched._title}');
+      }
+      stdout.writeln('¿Qué película quieres borrar?');
+      var opcion = stdin.readLineSync() ?? 'e';
+      bool encontrado = false;
+      for (Wishlist watched in listaWishlist) {
+        if (watched._title == opcion) {
+          await conn.query('DELETE FROM wishlist WHERE title = ?', [opcion]);
+          stdout.writeln('Película borrada');
+          encontrado = true;
+          break;
+        }
+      }
+      if (encontrado == false) {
+        throw ('No se ha encontrado ninguna película con ese título');
+      }
+    } catch (e) {
+      print(e);
+      finalWishlist(usuario);
     } finally {
       await conn.close();
     }
