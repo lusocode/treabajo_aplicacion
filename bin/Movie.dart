@@ -29,6 +29,7 @@ class Movie {
     this._imdbRating = map['imdbRating'];
   }
 
+  //MÉTODO PARA AÑADIR UNA PELÍCULA A LA BD
   insertarMovie() async {
     var conn = await Database().conexion();
     try {
@@ -43,6 +44,7 @@ class Movie {
     }
   }
 
+  // MÉTODO PARA BORRAR UNA PELÍCULA DE LA BD
   borrarMovie() async {
     var conn = await Database().conexion();
     try {

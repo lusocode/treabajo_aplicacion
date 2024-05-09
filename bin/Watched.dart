@@ -28,6 +28,7 @@ class Watchedlist {
     this._title = map['title'];
   }
 
+  // MENÚ FINAL DE WATCHEDLIST
   finalWatchedlist(UsuarioMr usuario) async {
     String? nombre = usuario.idusuario;
     int? opcion;
@@ -59,6 +60,7 @@ class Watchedlist {
     }
   }
 
+  //MÉTODO PARA AÑADIR UNA PELÍCULA A LA WATCHEDLIST
   addPelicula(UsuarioMr usuario) async {
     String apiKey = "a45fb635";
     Uri url;
@@ -107,6 +109,7 @@ class Watchedlist {
     }
   }
 
+  //MÉTODO PARA LISTAR TODAS LAS PELÍCULAS QUE SE ENCUENTRAN EN LA WATCHEDLIST
   allWatchedlist(String? id) async {
     var conn = await Database().conexion();
     try {
@@ -122,6 +125,7 @@ class Watchedlist {
     }
   }
 
+  //MÉTODO PARA AÑADIR UNA PELÍCULA A LA TABLA WATCHEDLIST DE LA BD
   insertarWatchedlist() async {
     var conn = await Database().conexion();
     try {
@@ -135,6 +139,7 @@ class Watchedlist {
     }
   }
 
+  //MÉTODO PARA BORRAR UNA PELÍCULA DE LA WATCHEDLIST
   borrarPeliculaWatchedList(UsuarioMr usuario) async {
     var conn = await Database().conexion();
     try {

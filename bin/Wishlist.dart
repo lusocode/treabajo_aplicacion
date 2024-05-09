@@ -27,6 +27,7 @@ class Wishlist {
     this._title = map['title'];
   }
 
+  // MENÚ FINAL DE LA LISTA WIHSLIST
   finalWishlist(UsuarioMr usuario) async {
     String? nombre = usuario.idusuario;
     int? opcion;
@@ -58,6 +59,7 @@ class Wishlist {
     }
   }
 
+  // MÉTODO PARA AÑADIR UNA PELÍCULA A LA WISHLIST
   addPeliculaWishlist(UsuarioMr usuario) async {
     String apiKey = "a45fb635";
     Uri url;
@@ -106,6 +108,7 @@ class Wishlist {
     }
   }
 
+  // MÉTODO PARA AÑADIR UNA PELÍCULA A LA TABLA DE WISHLIST DE LA BD
   insertarWishlist() async {
     var conn = await Database().conexion();
     try {
@@ -120,6 +123,7 @@ class Wishlist {
     }
   }
 
+  //MÉTODO PARA LISTAR TODAS LAS PELÍCULAS DE LA LISTA WISHLIST
   allWishlist(String? id) async {
     var conn = await Database().conexion();
     try {
@@ -135,6 +139,7 @@ class Wishlist {
     }
   }
 
+  // MÉTODO PARA BORRAR UNA PELÍCULA DE LA LISTA DE WISHLIST
   borrarPeliculaWishlist(UsuarioMr usuario) async {
     var conn = await Database().conexion();
     try {

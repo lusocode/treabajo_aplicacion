@@ -24,6 +24,7 @@ class UsuarioMr {
     _correoElectronico = map['correoElectronico'];
   }
 
+  // MÉTODO PARA INSERTAR UN USUARIO EN LA BD
   insertarUsuario() async {
     var conn = await Database().conexion();
     try {
@@ -38,6 +39,7 @@ class UsuarioMr {
     }
   }
 
+  // MÉTODO PARA LOGUEARTE
   loginUsuario() async {
     var conn = await Database().conexion();
     try {

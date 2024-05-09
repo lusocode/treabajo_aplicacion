@@ -4,6 +4,7 @@ import "Watched.dart";
 import 'Wishlist.dart';
 
 class App {
+  //MENÚ QUE TE APARECE AL INICIAR LA APP
   menuInicial() async {
     int? opcion;
     do {
@@ -23,6 +24,7 @@ class App {
     }
   }
 
+  //MENÚ QUE APARECE UNA VEZ QUE TE LOGUEAS
   menuLogueado(UsuarioMr usuario) async {
     int? opcion;
     String? nombre = usuario.idusuario;
@@ -47,6 +49,7 @@ class App {
     }
   }
 
+  // MÉTODO PARA CREAR UN USUARIO
   creacionUsuario() async {
     UsuarioMr usuarioMr = new UsuarioMr();
 
@@ -66,6 +69,7 @@ class App {
   bool menuLogueado_respuestaNoValida(int? opcion) =>
       opcion == null || opcion != 1 && opcion != 2 && opcion != 3;
 
+  //MÉTODO PARA LOGUEARTE Y ENTRAR EN LA APP
   login() async {
     UsuarioMr usuario = UsuarioMr();
     stdout.writeln('Introduce tu nombre de usuario');
