@@ -1,3 +1,5 @@
+import "dart:io";
+
 import "package:mysql1/mysql1.dart";
 import "Database.dart";
 
@@ -28,7 +30,7 @@ class UsuarioMr {
       await conn.query(
           'INSERT INTO usuarios (idusuario, password, correo) VALUES (?,?,?)',
           [_idusuario, _password, _correoElectronico]);
-      print('Usuario insertado correctamente');
+      stdout.writeln('Usuario insertado correctamente');
     } catch (e) {
       print(e);
     } finally {

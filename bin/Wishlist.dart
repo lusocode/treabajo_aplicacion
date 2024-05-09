@@ -41,18 +41,15 @@ class Wishlist {
     } while (watchedlistLogueada_respuestaNoValida(opcion));
     switch (opcion) {
       case 1:
-        await addPeliculaWishlist(usuario);
-        finalWishlist(usuario);
+        addPeliculaWishlist(usuario);
         break;
       case 2:
-        await borrarPeliculaWishlist(usuario);
-        finalWishlist(usuario);
+        borrarPeliculaWishlist(usuario);
         break;
       case 3:
         List<Wishlist> listaWishlist = await allWishlist(usuario.idusuario);
         for (Wishlist wish in listaWishlist) {
           stdout.writeln('La película que quieres ver es: ${wish._title}');
-          finalWishlist(usuario);
         }
         break;
       case 4:
@@ -99,6 +96,7 @@ class Wishlist {
         idusuario = usuario.idusuario;
         title = bodyDetallado['Title'];
         await insertarWishlist();
+        await App().menuLogueado(usuario);
       } else if (respuesta.statusCode == 404) {
         throw ("La película que buscas no existe!");
       } else

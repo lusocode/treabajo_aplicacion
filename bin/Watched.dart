@@ -42,21 +42,18 @@ class Watchedlist {
     } while (watchedlistLogueada_respuestaNoValida(opcion));
     switch (opcion) {
       case 1:
-        await addPelicula(usuario);
-        App().menuLogueado(usuario);
+        addPelicula(usuario);
         break;
       case 2:
-        await borrarPeliculaWatchedList(usuario);
-        finalWatchedlist(usuario);
+        borrarPeliculaWatchedList(usuario);
         break;
       case 3:
         List<Watchedlist> listaWatchedlist =
             await allWatchedlist(usuario.idusuario);
         for (Watchedlist watched in listaWatchedlist) {
           stdout.writeln('Has visto: ${watched._title}');
-          finalWatchedlist(usuario);
         }
-        break;
+
       case 4:
         App().menuLogueado;
     }
@@ -100,6 +97,7 @@ class Watchedlist {
         idusuario = usuario.idusuario;
         title = bodyDetallado['Title'];
         await insertarWatchedlist();
+        await App().menuLogueado(usuario);
       } else if (respuesta.statusCode == 404) {
         throw ("La película que buscas no existe!");
       } else

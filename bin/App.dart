@@ -15,10 +15,10 @@ class App {
 
     switch (opcion) {
       case 1:
-        await creacionUsuario();
+        creacionUsuario();
         break;
       case 2:
-        await login();
+        login();
         break;
     }
   }
@@ -36,10 +36,10 @@ class App {
     } while (menuLogueado_respuestaNoValida(opcion));
     switch (opcion) {
       case 1:
-        await Watchedlist().finalWatchedlist(usuario);
+        Watchedlist().finalWatchedlist(usuario);
         break;
       case 2:
-        await Wishlist().finalWishlist(usuario);
+        Wishlist().finalWishlist(usuario);
         break;
       case 3:
         menuInicial();
@@ -83,12 +83,4 @@ class App {
       menuLogueado(resultado);
     }
   }
-
-  // listarMoviesUsuario(String? id) async {
-  //   var listaMovies = await Movie().mostrarWatchedlistFromUsuario(id);
-  //   for (Movie elemento in listaMovies) {
-  //     stdout.writeln("${elemento.imdbID} - ${elemento.title}");
-  //   }
-  //   return listaMovies;
-  // }
 }
